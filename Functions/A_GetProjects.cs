@@ -28,6 +28,7 @@ namespace Metrics
         public async Task<DevOpsProjectContext> GetProjectsAsync([ActivityTrigger] DevOpsProjectContext projectContext, ILogger metriclog)
         {
             _metricLog= metriclog;
+            _metricLog.LogDebug($"*** Get projects ***");
             List<string> projectList = null;
 
             var result = await $"https://dev.azure.com/{_organization}"
@@ -43,7 +44,11 @@ namespace Metrics
                 foreach (var project in ((dynamic)result.value))
                     projectList.Add(project.name);
             }
-            projectContext.DevOpsProjects = projectList.ToArray<string>();
+            else
+            {
+                _metricLog.LogWarning($"*** No projects found! ***");
+            }
+            projectContext.DevOpsProjects = projectList?.ToArray<string>();
 
             return projectContext;
         }

@@ -17,10 +17,9 @@ namespace Metrics
         }
 
         /// <summary>
-        /// Time trigger, but better approach is queue trigger
+        /// Queuetrigger
         /// </summary>
-        /// <param name="myTimer"></param>
-        /// <param name="starter"></param>
+        /// <param name="myQueueItem"></param>
         /// <param name="log"></param>
         /// <returns></returns>
         [FunctionName(Constants.OrchestratorTrigger)]
@@ -29,6 +28,8 @@ namespace Metrics
             [DurableClient] IDurableOrchestrationClient starter, 
             ILogger log)
         {
+            _metricLog = log;
+
             string instanceId = await starter.StartNewAsync("O_CollectMetrics");
 
             log.LogDebug($"*** Started orchestration with ID = '{instanceId}'. ***");
@@ -42,6 +43,7 @@ namespace Metrics
         public async Task RunOrchestratorAsync([OrchestrationTrigger] IDurableOrchestrationContext context, ILogger metriclog)
         {
             _metricLog = metriclog;
+            _metricLog.LogInformation("*** Start metric crawling ***");
             var startTime = context.CurrentUtcDateTime;
             var projectContext = new DevOpsProjectContext();
 
@@ -56,6 +58,7 @@ namespace Metrics
             // iterate projects for collecting project KPIs
             foreach (var currentProject in projectContext?.DevOpsProjects)
             {
+                _metricLog.LogDebug($"*** Crawling KPIs for project {currentProject} ***");
                 projectContext.CurrentProject = currentProject;
                 projectContext= await context.CallActivityAsync<DevOpsProjectContext>(Constants.GetProjectMetrics, projectContext);
             }
