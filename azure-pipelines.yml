@@ -17,10 +17,13 @@ variables:
   applicationInsightsKey: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/AIInstrumentationKey)'
 
   # Azure Devops Personal Access Token (Reference to KV secret)
-  pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)'
+  pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/OrgaPAT)'
 
   # Function app name
   functionAppName: 'DevOpsMetricCrawler'
+
+  # Azure DevOps Organization
+  vstsOrganization: 'https://dev.azure.com/pocit/'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -78,7 +81,7 @@ stages:
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
-              appSettings: -APPINSIGHTS_INSTRUMENTATIONKEY $(applicationInsightsKey) -PAT $(pat) -AzureWebJobsStorage $(azureWebJobsStorage)
+              appSettings: -APPINSIGHTS_INSTRUMENTATIONKEY $(applicationInsightsKey) -Appsettings.PAT $(pat) -AzureWebJobsStorage $(azureWebJobsStorage) -Appsettings.VSTSApiVersion 6.0 -Appsettings.VSTSOrganization $(VSTSOrganization)
               appType: functionAppLinux
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
