@@ -9,8 +9,14 @@ trigger:
 variables:
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'Microsoft Azure Internal Consumption'
-  azureWebJobsStorage: 'metricstrg'
+
+  # Storage Account (for queues) (Reference to KV secret)
+  azureWebJobsStorage: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/metricStorageAccount/)'
+
+  # App Insights Key for metrics (Reference to KV secret)
   applicationInsightsKey: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/AIInstrumentationKey)'
+
+  # Azure Devops Personal Access Token (Reference to KV secret)
   pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)'
 
   # Function app name
