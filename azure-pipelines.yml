@@ -12,7 +12,7 @@ variables:
 
   applicationInsightsKey: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/AIInstrumentationKey)'
 
-  pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)''
+  pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)'
 
   # Function app name
   functionAppName: 'MetricCrawler'
