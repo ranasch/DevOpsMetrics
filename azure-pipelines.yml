@@ -22,6 +22,8 @@ variables:
   # Function app name
   functionAppName: 'DevOpsMetricCrawler'
 
+  resourceGroup: 'ZF-Demo'
+
   # Azure DevOps Organization
   vstsOrganization: 'https://dev.azure.com/pocit/'
 
@@ -87,16 +89,16 @@ stages:
               appSettings: '-APPINSIGHTS_INSTRUMENTATIONKEY "$(applicationInsightsKey)"'
         
           - task: AzureAppServiceSettings@1
-              displayName: 'Azure App Service Settings: Function'
-              inputs:
-                azureSubscription: '$(azureSubscription)'
-                appName: $(functionAppName)
+            displayName: 'Azure App Service Settings: DevOpsMetricCrawler'
+            inputs:
+                azureSubscription: 'Microsoft Azure Internal Consumption'
+                appName: DevOpsMetricCrawler
+                resourceGroupName: '$(resourceGroup)'
                 appSettings: |
-                 [
+                    [
                     {
-                     "PAT": "$(pat)",
-                     "VSTSApiVersion": "6.0",
-                     "VSTSOrganization": "$(VSTSOrganization)"
+                        "PAT": "$(pat)",
+                        "VSTSApiVersion": "6.0",
+                        "VSTSOrganization": "$(VSTSOrganization)"
                     }
-                 ]
-     
+                    ]
