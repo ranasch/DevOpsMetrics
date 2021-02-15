@@ -14,7 +14,7 @@ variables:
   functionAppName: 'MetricCrawler'
 
   # Agent VM image name
-  vmImageName: 'ubuntu-20.04'
+  vmImageName: 'ubuntu-latest'
 
   # Working Directory
   workingDirectory: '$(System.DefaultWorkingDirectory)/'
@@ -27,7 +27,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      name: $(vmImageName)
+      vmImage: $(vmImageName)
 
     steps:
     - task: DotNetCoreCLI@2
@@ -60,7 +60,7 @@ stages:
     displayName: Deploy
     environment: 'dev-stage'
     pool:
-      name: $(vmImageName)
+      vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy: 
