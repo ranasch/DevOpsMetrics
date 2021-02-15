@@ -20,12 +20,13 @@ namespace Metrics
                .AddEnvironmentVariables()
                .Build();
 
-            try
+            var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
+            builder.Services.AddSingleton(appSettings);
+
+            if(appSettings==null)
             {
-                var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
-                builder.Services.AddSingleton(appSettings);
+                throw new ApplicationException("*** AppSettings can´t be resolved ***");
             }
-            catch (Exception) { }
 
             // Create queue if not exists
             var storage = config.GetValue<string>("AzureWebJobsStorage");
