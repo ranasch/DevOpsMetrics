@@ -13,17 +13,19 @@ namespace Metrics
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var confBuild = new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                .SetBasePath(Environment.CurrentDirectory)
                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                .AddUserSecrets<Startup>(true, true)
-               .AddEnvironmentVariables();
+               .AddEnvironmentVariables()
+               .Build();
 
-            var config = confBuild.Build();
-
-            var kvSettings = config.GetSection("AppSettings");
-            var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
-            builder.Services.AddSingleton(appSettings);
+            try
+            {
+                var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
+                builder.Services.AddSingleton(appSettings);
+            }
+            catch (Exception) { }
 
             // Create queue if not exists
             var storage = config.GetValue<string>("AzureWebJobsStorage");
