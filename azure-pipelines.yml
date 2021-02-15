@@ -74,6 +74,6 @@ stages:
             inputs:
               azureSubscription: '$(azureSubscription)'
               appSettings: -APPINSIGHTS_INSTRUMENTATIONKEY $(applicationInsightsKey) -PAT $(pat)
-              appType: functionApp
+              appType: functionAppLinux
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
