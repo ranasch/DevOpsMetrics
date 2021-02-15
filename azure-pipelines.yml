@@ -81,7 +81,22 @@ stages:
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
-              appSettings: '-APPINSIGHTS_INSTRUMENTATIONKEY "$(applicationInsightsKey)" -Appsettings:PAT "$(pat)" -Appsettings:VSTSApiVersion "6.0" -Appsettings:VSTSOrganization "$(VSTSOrganization)"'
               appType: functionAppLinux
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              appSettings: '-APPINSIGHTS_INSTRUMENTATIONKEY "$(applicationInsightsKey)"'
+        
+          - task: AzureAppServiceSettings@1
+              displayName: 'Azure App Service Settings: Function'
+              inputs:
+                azureSubscription: '$(azureSubscription)'
+                appName: $(functionAppName)
+                appSettings: |
+                 [
+                    {
+                     "PAT": "$(pat)",
+                     "VSTSApiVersion": "6.0",
+                     "VSTSOrganization": "$(VSTSOrganization)"
+                    }
+                 ]
+     
