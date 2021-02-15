@@ -9,13 +9,12 @@ trigger:
 variables:
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'Microsoft Azure Internal Consumption'
-
+  azureWebJobsStorage: 'metricstrg'
   applicationInsightsKey: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/AIInstrumentationKey)'
-
   pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)'
 
   # Function app name
-  functionAppName: 'MetricCrawler'
+  functionAppName: 'DevOpsMetricCrawler'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -73,7 +72,7 @@ stages:
             displayName: 'Azure functions app deploy'
             inputs:
               azureSubscription: '$(azureSubscription)'
-              appSettings: -APPINSIGHTS_INSTRUMENTATIONKEY $(applicationInsightsKey) -PAT $(pat)
-              appType: functionApp
+              appSettings: -APPINSIGHTS_INSTRUMENTATIONKEY $(applicationInsightsKey) -PAT $(pat) -AzureWebJobsStorage $(azureWebJobsStorage)
+              appType: functionAppLinux
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
