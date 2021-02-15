@@ -15,7 +15,7 @@ variables:
   pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/PocitPAT)'
 
   # Function app name
-  functionAppName: 'MetricCrawler'
+  functionAppName: 'DevOpsMetricCrawler'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
