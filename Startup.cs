@@ -16,17 +16,18 @@ namespace Metrics
             var config = new ConfigurationBuilder()
                .SetBasePath(Environment.CurrentDirectory)
                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-               .AddUserSecrets<Startup>(true, true)
                .AddEnvironmentVariables()
+               .AddUserSecrets<Startup>(true, true)
                .Build();
 
-            var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
-            builder.Services.AddSingleton(appSettings);
-
-            if(appSettings==null)
+            var appSettings = new Appsettings()
             {
-                throw new ApplicationException("*** AppSettings can´t be resolved ***");
-            }
+                PAT = config["PAT"],
+                VSTSApiVersion = config["VSTSApiVersion"],
+                VSTSOrganization = config["VSTSOrganization"]
+            };
+            //var appSettings = config.GetSection("AppSettings").Get<Appsettings>();
+            builder.Services.AddSingleton(appSettings);
 
             // Create queue if not exists
             var storage = config.GetValue<string>("AzureWebJobsStorage");

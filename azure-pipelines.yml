@@ -25,7 +25,7 @@ variables:
   resourceGroup: 'ZF-Demo'
 
   # Azure DevOps Organization
-  vstsOrganization: 'https://dev.azure.com/pocit/'
+  vstsOrganization: 'pocit'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -86,19 +86,4 @@ stages:
               appType: functionAppLinux
               appName: $(functionAppName)
               package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              appSettings: '-APPINSIGHTS_INSTRUMENTATIONKEY "$(applicationInsightsKey)"'
-        
-          - task: AzureAppServiceSettings@1
-            displayName: 'Azure App Service Settings: DevOpsMetricCrawler'
-            inputs:
-                azureSubscription: 'Microsoft Azure Internal Consumption'
-                appName: DevOpsMetricCrawler
-                resourceGroupName: '$(resourceGroup)'
-                appSettings: |
-                    [
-                    {
-                        "PAT": "$(pat)",
-                        "VSTSApiVersion": "6.0",
-                        "VSTSOrganization": "$(VSTSOrganization)"
-                    }
-                    ]
+              appSettings: '-APPINSIGHTS_INSTRUMENTATIONKEY "$(applicationInsightsKey)" -PAT "$(PAT)" -VSTSApiVersion "6.0" -VSTSOrganization "$(VSTSOrganization)"'
