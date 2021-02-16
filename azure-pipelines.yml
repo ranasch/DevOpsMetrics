@@ -14,7 +14,7 @@ variables:
   azureWebJobsStorage: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/metricStorageAccount/)'
 
   # App Insights Key for metrics (Reference to KV secret)
-  applicationInsightsKey: 'a04b7405-6a3c-4b30-974a-f017e0016dc2'
+  applicationInsightsKey: '$(AppInsightsKey)'
 
   # Azure Devops Personal Access Token (Reference to KV secret)
   pat: '@Microsoft.KeyVault(SecretUri=https://metrickv.vault.azure.net/secrets/OrgaPAT)'
